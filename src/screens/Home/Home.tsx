@@ -2,11 +2,14 @@ import React from 'react'
 import { ororoApi } from '../../libs/ororoApi'
 import { NavigationProps } from '../../types/navigation'
 import { MovieShort, ShowShort } from '../../types/ororo'
+import { Preview } from '../../components/Preview'
+import { Carousel } from '../../components/Carousel'
 
 const Home = ({ navigate }: NavigationProps) => {
   const [loading, setLoading] = React.useState(true)
   const [movies, setMovies] = React.useState<MovieShort[]>([])
   const [shows, setShows] = React.useState<ShowShort[]>([])
+  const [selected, setSelected] = React.useState<MovieShort | ShowShort>()
 
   React.useEffect(() => {
     async function fetchData() {
@@ -23,6 +26,7 @@ const Home = ({ navigate }: NavigationProps) => {
         setMovies(moviesData)
         setShows(showsData)
         setLoading(false)
+        setSelected(moviesData[0])
       } catch (error) {
         navigate('login')
       }
@@ -37,14 +41,8 @@ const Home = ({ navigate }: NavigationProps) => {
 
   return (
     <div>
-      <h1>Home</h1>
-      <p>
-        movies:{' '}
-        {movies.slice(0, 10).map((movie) => (
-          <img key={movie.id} src={movie.poster_thumb} alt='thumbnail' />
-        ))}
-      </p>
-      <p>shows: {JSON.stringify(shows.slice(0, 10))}</p>
+      <Preview item={selected} />
+      <Carousel items={movies.slice(0, 20)} />
     </div>
   )
 }

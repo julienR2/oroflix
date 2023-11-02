@@ -18,7 +18,7 @@ const Index = () => {
   const Route = Routes[currentRoute]
 
   return (
-    <div>
+    <div className='text-white font-sans'>
       <Route navigate={setCurrentRoute} />
     </div>
   )

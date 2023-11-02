@@ -1,5 +1,6 @@
 import { orderBy } from 'lodash'
 import { Episode, Movie, MovieShort, Short, ShowShort } from '../types/ororo'
+import localforage from 'localforage'
 
 const cache: { movies: MovieShort[]; shows: ShowShort[] } = {
   movies: [],
@@ -17,8 +18,10 @@ const getHeaders = () => {
 }
 
 const movies = async (): Promise<MovieShort[]> => {
-  if (cache.movies.length) {
-    return cache.movies
+  const cachedMovies = await localforage.getItem<MovieShort[] | null>('movies')
+
+  if (cachedMovies?.length) {
+    return cachedMovies
   }
 
   const response = await fetch('https://front.ororo-mirror.tv/api/v2/movies', {
@@ -27,8 +30,10 @@ const movies = async (): Promise<MovieShort[]> => {
 
   const { movies: data } = await response.json()
 
-  cache.movies = orderBy(data, '')
-  return data
+  const moviesToChache = orderBy(data, 'updated_at', 'desc')
+  localforage.setItem('movies', moviesToChache)
+
+  return moviesToChache
 }
 
 const movie = async (id: number): Promise<Movie> => {
@@ -42,17 +47,22 @@ const movie = async (id: number): Promise<Movie> => {
 }
 
 const shows = async (): Promise<ShowShort[]> => {
-  if (cache.shows.length) {
-    return cache.shows
+  const cachedShows = await localforage.getItem<ShowShort[] | null>('shows')
+
+  if (cachedShows?.length) {
+    return cachedShows
   }
 
   const response = await fetch('https://front.ororo-mirror.tv/api/v2/shows', {
     headers: getHeaders(),
   })
+
   const { shows: data } = await response.json()
 
-  cache.shows = data
-  return data
+  const showsToChache = orderBy(data, 'updated_at', 'desc')
+  localforage.setItem('shows', showsToChache)
+
+  return showsToChache
 }
 
 const show = async (id: number): Promise<Short[]> => {
