@@ -1,6 +1,6 @@
 import React from 'react'
-import { NavigationProps } from '../../types/navigation'
-import { ororoApi } from '../../libs/ororoApi'
+import { NavigationProps } from '../types/navigation'
+import { ororoApi } from '../libs/ororoApi'
 
 type LoginProps = NavigationProps
 

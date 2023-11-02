@@ -1,10 +1,10 @@
 import React from 'react'
 
-import Login from './Login/Login'
+import Login from './Login'
 import './index.css'
-import Home from './Home/Home'
+import Home from './Home'
 import { Screens } from '../types/navigation'
-import Search from './Search/Search'
+import Search from './Search'
 
 const Routes = {
   login: Login,
@@ -14,7 +14,7 @@ const Routes = {
 
 const Index = () => {
   const [currentRoute, setCurrentRoute] = React.useState<Screens>('home')
-  console.log('currentRoute', currentRoute)
+
   const Route = Routes[currentRoute]
 
   return (
