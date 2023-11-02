@@ -2,11 +2,6 @@ import { orderBy } from 'lodash'
 import { Episode, Movie, MovieShort, Short, ShowShort } from '../types/ororo'
 import localforage from 'localforage'
 
-const cache: { movies: MovieShort[]; shows: ShowShort[] } = {
-  movies: [],
-  shows: [],
-}
-
 const getHeaders = () => {
   const token = localStorage.getItem('token')
 

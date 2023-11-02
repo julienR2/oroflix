@@ -27,7 +27,7 @@ export const Carousel = ({ label, items }: Props) => {
   )
 
   return (
-    <div>
+    <div className='relative'>
       <p className='ml-8 text-gray-300 text-2xl font-semibold mb-2'>{label}</p>
       <ul
         ref={ulRef}
@@ -37,7 +37,7 @@ export const Carousel = ({ label, items }: Props) => {
           <li
             key={movie.id}
             className={classNames(
-              'flex-grow-0 flex-shrink-0 basis-auto mr-4 snap-start w-[12vw]',
+              'flex-grow-0 flex-shrink-0 basis-auto mr-4 snap-start w-[12vw] rounded-sm overflow-hidden',
               { 'ml-8': index === 0 },
             )}
             onClick={onClick(movie)}

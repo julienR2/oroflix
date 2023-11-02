@@ -9,9 +9,9 @@ export const Preview = () => {
   if (!selectedItem) return null
 
   return (
-    <div className='p-8 relative h-[40vh] -z-10'>
+    <div className='p-8 relative h-[40vh]'>
       <div className='font-medium text-lg max-w-[50%] z-10 relative'>
-        <h1 className='text-7xl mb-3 font-bold'>{selectedItem.name}</h1>
+        <h1 className='text-7xl font-bold line-clamp-2 mb-4 max-w-md'>{selectedItem.name}</h1>
         <div className='text-gray-400 flex selectedItems-center mb-6 text-xl items-center'>
           {selectedItem.year}
           {' · '}

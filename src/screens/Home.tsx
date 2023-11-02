@@ -14,7 +14,6 @@ const Home = ({ navigate }: Props) => {
   const [loading, setLoading] = React.useState(true)
   const [movies, setMovies] = React.useState<MovieShort[]>([])
   const [shows, setShows] = React.useState<ShowShort[]>([])
-  const [selected, setSelected] = React.useState<MovieShort | ShowShort>()
 
   const popular = React.useMemo(
     () => orderBy([...movies, ...shows], 'user_popularity', 'desc'),
@@ -40,14 +39,14 @@ const Home = ({ navigate }: Props) => {
         setMovies(moviesData)
         setShows(showsData)
         setLoading(false)
-        setSelected(moviesData[0])
+        setItem('selectedItem', moviesData[0])
       } catch (error) {
         navigate('login')
       }
     }
 
     fetchData()
-  }, [navigate])
+  }, [navigate, setItem])
 
   if (loading) {
     return <h1>Loading</h1>
