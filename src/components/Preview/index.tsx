@@ -1,7 +1,10 @@
 import React from 'react'
-import { ShowShort } from '../types/ororo'
-import imdbLogo from '../assets/imdb.svg'
-import { StoreContext } from '../hooks/useStore'
+import { ShowShort } from '../../types/ororo'
+import imdbLogo from '../../assets/imdb.svg'
+import { StoreContext } from '../../hooks/useStore'
+import classNames from 'classnames'
+
+import classes from './styles.module.css'
 
 export const Preview = () => {
   const { selectedItem } = React.useContext(StoreContext)
@@ -32,11 +35,7 @@ export const Preview = () => {
         </p>
       </div>
       <div
-        className=' absolute top-0 left-0 right-0 flex justify-end bottom-[-8vh]'
-        style={{
-          background:
-            'linear-gradient(to right, black 40vw, transparent 80vw), linear-gradient(to top, black 4vh, transparent 20vh)',
-        }}
+        className={classNames(classes.backdropWrapper, 'absolute top-0 left-0 right-0 flex justify-end bottom-[-8vh]')}
       >
         <img
           src={selectedItem.backdrop_url}

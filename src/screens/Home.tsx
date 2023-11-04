@@ -15,14 +15,19 @@ const Home = ({ navigate }: Props) => {
   const [movies, setMovies] = React.useState<MovieShort[]>([])
   const [shows, setShows] = React.useState<ShowShort[]>([])
 
-  const popular = React.useMemo(
-    () => orderBy([...movies, ...shows], 'user_popularity', 'desc'),
-    [movies, shows],
+  const popularMovies = React.useMemo(
+    () => orderBy(movies, 'user_popularity', 'desc'),
+    [movies],
+  )
+
+  const popularShows = React.useMemo(
+    () => orderBy(shows, 'user_popularity', 'desc'),
+    [shows],
   )
 
   React.useEffect(() => {
-    setItem('selectedItem', popular[0])
-  }, [setItem, popular])
+    setItem('selectedItem', popularMovies[0])
+  }, [setItem, popularMovies])
 
   React.useEffect(() => {
     async function fetchData() {
@@ -41,7 +46,7 @@ const Home = ({ navigate }: Props) => {
         setLoading(false)
         setItem('selectedItem', moviesData[0])
       } catch (error) {
-        navigate('login')
+        navigate('Login')
       }
     }
 
@@ -53,10 +58,14 @@ const Home = ({ navigate }: Props) => {
   }
 
   return (
-    <>
+    <div className='h-screen flex flex-col'>
       <Preview />
-      <Carousel label='Popular' items={popular.slice(0, 20)} />
-    </>
+      <div className='overflow-scroll'>
+
+        <Carousel label='Popular Movies' items={popularMovies.slice(0, 20)} />
+        <Carousel label='Popular Shows' items={popularShows.slice(0, 20)} />
+      </div>
+    </div>
   )
 }
 

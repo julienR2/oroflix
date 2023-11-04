@@ -12,7 +12,9 @@ body {
 }
 
 html {
-  background: #000000;
+  background: theme('colors.gray.950');
+  color: theme('textColor.gray.50');
+  font-family: theme('fontFamily.sans');
 }
 
 body,
