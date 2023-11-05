@@ -14,13 +14,17 @@ type CarouselItemProps = {
 
 
 const CarouselItem = ({ poster, onClick, className, autoFocus, onFocus }: CarouselItemProps) => {
-  const { ref, focused, focusSelf } = useFocusable({ onFocus });
+  const { ref, focused, focusSelf } = useFocusable({
+    onFocus,
+    onEnterPress: () => {
+
+    }
+  });
 
   React.useEffect(() => {
     if (!autoFocus) return
 
     focusSelf();
-
   }, [autoFocus, focusSelf])
 
   return <li
@@ -28,7 +32,7 @@ const CarouselItem = ({ poster, onClick, className, autoFocus, onFocus }: Carous
     className={classNames(
       'flex-grow-0 flex-shrink-0 basis-auto mr-4 snap-start w-[12vw] rounded-sm overflow-hidden',
       className,
-      { 'border-2': focused }
+      { 'border-2 border-gray-400': focused }
     )}
     onClick={onClick}
   >
@@ -39,12 +43,12 @@ const CarouselItem = ({ poster, onClick, className, autoFocus, onFocus }: Carous
 type CarouselProps = {
   label: string
   items: Array<MovieShort | ShowShort>
-
+  onFocus: FocusHandler
 }
 
-export const Carousel = ({ label, items }: CarouselProps) => {
+export const Carousel = ({ label, items, onFocus }: CarouselProps) => {
   const { setItem } = React.useContext(StoreContext)
-  const { ref, focusKey } = useFocusable();
+  const { ref, focusKey } = useFocusable({ onFocus });
 
   const scrollingRef = React.useRef<HTMLUListElement>(null)
 
@@ -57,8 +61,7 @@ export const Carousel = ({ label, items }: CarouselProps) => {
   const onItemFocus = React.useCallback<FocusHandler>(
     ({ x }) => {
       scrollingRef.current?.scrollTo({
-        left: x,
-        behavior: 'smooth'
+        left: x, behavior: 'smooth'
       });
     },
     [],
@@ -92,3 +95,4 @@ export const Carousel = ({ label, items }: CarouselProps) => {
     </FocusContext.Provider>
   )
 }
+

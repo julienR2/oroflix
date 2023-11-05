@@ -6,12 +6,13 @@ import { Preview } from '../components/Preview'
 import { Carousel } from '../components/Carousel'
 import { orderBy } from 'lodash'
 import { StoreContext, StoreProvider } from '../hooks/useStore'
+import { FocusHandler } from '@noriginmedia/norigin-spatial-navigation'
 
 type Props = NavigationProps
 
-const Home = ({ navigate }: Props) => {
+const Home = ({ navigate, loading, setLoading }: Props) => {
+  const scrollingRef = React.useRef<HTMLDivElement>(null)
   const { setItem } = React.useContext(StoreContext)
-  const [loading, setLoading] = React.useState(true)
   const [movies, setMovies] = React.useState<MovieShort[]>([])
   const [shows, setShows] = React.useState<ShowShort[]>([])
 
@@ -51,19 +52,28 @@ const Home = ({ navigate }: Props) => {
     }
 
     fetchData()
-  }, [navigate, setItem])
+  }, [navigate, setItem, setLoading])
+
+  const onCarouselFocus = React.useCallback<FocusHandler>(
+    ({ y }) => {
+      scrollingRef.current?.scrollTo({
+        top: y, behavior: 'smooth'
+      });
+    },
+    [],
+  )
 
   if (loading) {
-    return <h1>Loading</h1>
+    return null
   }
 
   return (
     <div className='h-screen flex flex-col'>
       <Preview />
-      <div className='overflow-scroll'>
 
-        <Carousel label='Popular Movies' items={popularMovies.slice(0, 20)} />
-        <Carousel label='Popular Shows' items={popularShows.slice(0, 20)} />
+      <div ref={scrollingRef} className='overflow-scroll'>
+        <Carousel label='Popular Movies' items={popularMovies.slice(0, 20)} onFocus={onCarouselFocus} />
+        <Carousel label='Popular Shows' items={popularShows.slice(0, 20)} onFocus={onCarouselFocus} />
       </div>
     </div>
   )

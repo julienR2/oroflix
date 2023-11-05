@@ -15,6 +15,7 @@ html {
   background: theme('colors.gray.950');
   color: theme('textColor.gray.50');
   font-family: theme('fontFamily.sans');
+  font-size: 1vw;
 }
 
 body,

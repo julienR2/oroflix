@@ -3,20 +3,35 @@ import { NavigationProps } from '../types/navigation'
 import { ororoApi } from '../libs/ororoApi'
 
 import logo from '../assets/logo.svg'
+import { Input } from '../components/Input'
+import { Button } from '../components/Button'
 
 type LoginProps = NavigationProps
 
-const Login = ({ navigate }: LoginProps) => {
+const Login = ({ navigate, loading, setLoading }: LoginProps) => {
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
 
+  React.useEffect(() => {
+    setLoading(false)
+  }, [setLoading])
+
   const onSubmit = React.useCallback<React.FormEventHandler<HTMLFormElement>>(async (event) => {
-    event.preventDefault()
+    event?.preventDefault()
 
-    await ororoApi.login(email, password)
+    if (loading) return
 
-    navigate('Home')
-  }, [email, password, navigate])
+    setLoading(true)
+
+    try {
+      await ororoApi.login(email, password)
+
+      navigate('Home')
+    } catch (error) {
+
+      setLoading(false)
+    }
+  }, [email, password, navigate, setLoading, loading])
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 pb-[20vh]">
@@ -38,7 +53,8 @@ const Login = ({ navigate }: LoginProps) => {
               Email address
             </label>
             <div className="mt-2">
-              <input
+              <Input
+                // ref={emailRef}
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 id="email"
@@ -46,7 +62,7 @@ const Login = ({ navigate }: LoginProps) => {
                 type="email"
                 autoComplete="email"
                 required
-                className="block w-full rounded-md border-0 py-1.5 bg-gray-900 text-gray-100 shadow-sm ring-1 ring-inset ring-gray-800 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-400 sm:text-sm sm:leading-6"
+                autoFocus
               />
             </div>
           </div>
@@ -58,26 +74,24 @@ const Login = ({ navigate }: LoginProps) => {
               </label>
             </div>
             <div className="mt-2">
-              <input
+              <Input
                 id="password"
                 name="password"
-                type="password"
+                type="text"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 autoComplete="current-password"
                 required
-                className="block w-full rounded-md border-0 py-1.5 bg-gray-900 text-gray-100 shadow-sm ring-1 ring-inset ring-gray-800 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-400 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
 
           <div>
-            <button
+            <Button
               type="submit"
-              className="flex w-full justify-center rounded-md bg-red-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Sign in
-            </button>
+            </Button>
           </div>
         </form>
       </div>
