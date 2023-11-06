@@ -7,26 +7,28 @@ import classNames from 'classnames'
 import classes from './styles.module.css'
 
 export const Preview = () => {
-  const { selectedItem } = React.useContext(StoreContext)
+  const { focusedItem } = React.useContext(StoreContext)
 
-  if (!selectedItem) return null
+  if (!focusedItem) return null
 
   return (
     <div className='p-8 relative h-[40vh]'>
       <div className='font-medium text-lg max-w-[50%] z-10 relative'>
-        <h1 className='text-7xl font-bold line-clamp-2 mb-4 max-w-md'>{selectedItem.name}</h1>
-        <div className='text-gray-400 flex selectedItems-center mb-6 text-xl items-center'>
-          {selectedItem.year}
+        <h1 className='text-7xl font-bold line-clamp-2 mb-4 max-w-[80%]'>
+          {focusedItem.name}
+        </h1>
+        <div className='text-gray-400 flex mb-6 text-xl items-center justify-start'>
+          {focusedItem.year}
           {' · '}
           <img src={imdbLogo} alt='imdb' className='h-5 mx-2' />
-          {selectedItem.imdb_rating}/10
-          {(selectedItem as ShowShort).myshows_id ? <>{' · '}Serie</> : ''}
+          {focusedItem.imdb_rating}/10
+          {(focusedItem as ShowShort).myshows_id ? <>{' · '}Serie</> : ''}
         </div>
         <p className='text-gray-400 text-2xl mb-5 line-clamp-3'>
-          {selectedItem.desc}
+          {focusedItem.desc}
         </p>
         <p className='text-gray-500 text-lg'>
-          {selectedItem.array_genres.map((genre, index) => (
+          {focusedItem.array_genres.map((genre, index) => (
             <span key={genre}>
               {index ? ' · ' : ''}
               {genre}
@@ -35,10 +37,13 @@ export const Preview = () => {
         </p>
       </div>
       <div
-        className={classNames(classes.backdropWrapper, 'absolute top-0 left-0 right-0 flex justify-end bottom-[-8vh]')}
+        className={classNames(
+          classes.backdropWrapper,
+          'absolute top-0 left-0 right-0 flex justify-end bottom-[-8vh]',
+        )}
       >
         <img
-          src={selectedItem.backdrop_url}
+          src={focusedItem.backdrop_url}
           alt='backdrop'
           className='-z-10 object-cover w-[60vw]'
         />

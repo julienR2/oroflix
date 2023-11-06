@@ -7,6 +7,7 @@ import { Carousel } from '../components/Carousel'
 import { orderBy } from 'lodash'
 import { StoreContext, StoreProvider } from '../hooks/useStore'
 import { FocusHandler } from '@noriginmedia/norigin-spatial-navigation'
+import { MovieModal } from '../components/MovieModal'
 
 type Props = NavigationProps
 
@@ -27,7 +28,7 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
   )
 
   React.useEffect(() => {
-    setItem('selectedItem', popularMovies[0])
+    setItem('focusedItem', popularMovies[0])
   }, [setItem, popularMovies])
 
   React.useEffect(() => {
@@ -45,7 +46,7 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
         setMovies(moviesData)
         setShows(showsData)
         setLoading(false)
-        setItem('selectedItem', moviesData[0])
+        setItem('focusedItem', moviesData[0])
       } catch (error) {
         navigate('Login')
       }
@@ -54,14 +55,12 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
     fetchData()
   }, [navigate, setItem, setLoading])
 
-  const onCarouselFocus = React.useCallback<FocusHandler>(
-    ({ y }) => {
-      scrollingRef.current?.scrollTo({
-        top: y, behavior: 'smooth'
-      });
-    },
-    [],
-  )
+  const onCarouselFocus = React.useCallback<FocusHandler>(({ y }) => {
+    scrollingRef.current?.scrollTo({
+      top: y,
+      behavior: 'smooth',
+    })
+  }, [])
 
   if (loading) {
     return null
@@ -72,8 +71,16 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
       <Preview />
 
       <div ref={scrollingRef} className='overflow-scroll'>
-        <Carousel label='Popular Movies' items={popularMovies.slice(0, 20)} onFocus={onCarouselFocus} />
-        <Carousel label='Popular Shows' items={popularShows.slice(0, 20)} onFocus={onCarouselFocus} />
+        <Carousel
+          label='Popular Movies'
+          items={popularMovies.slice(0, 20)}
+          onFocus={onCarouselFocus}
+        />
+        <Carousel
+          label='Popular Shows'
+          items={popularShows.slice(0, 20)}
+          onFocus={onCarouselFocus}
+        />
       </div>
     </div>
   )
@@ -81,6 +88,7 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
 
 const Providers = (props: Props) => (
   <StoreProvider>
+    <MovieModal />
     <Home {...props} />
   </StoreProvider>
 )

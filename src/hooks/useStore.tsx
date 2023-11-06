@@ -3,6 +3,7 @@ import { MovieShort, ShowShort } from '../types/ororo'
 import { ObjectToMap } from '../types/utils'
 
 export type Store = {
+  focusedItem?: MovieShort | ShowShort
   selectedItem?: MovieShort | ShowShort
 }
 
@@ -10,7 +11,7 @@ type Context = Store & {
   setItem: (...params: ObjectToMap<Store>) => void
 }
 
-export const StoreContext = React.createContext<Context>({ setItem: () => { } })
+export const StoreContext = React.createContext<Context>({ setItem: () => {} })
 
 export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
   const [store, setStore] = React.useState({})
