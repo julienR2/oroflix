@@ -1,5 +1,5 @@
 import { orderBy } from 'lodash'
-import { Episode, Movie, MovieShort, Short, ShowShort } from '../types/ororo'
+import { Episode, Movie, MovieShort, Show, ShowShort } from '../types/ororo'
 import localforage from 'localforage'
 
 const getHeaders = () => {
@@ -36,7 +36,7 @@ const movie = async (id: number): Promise<Movie> => {
     `https://front.ororo-mirror.tv/api/v2/movies/${id}`,
     { headers: getHeaders() },
   )
-  const data = response.json()
+  const data = await response.json()
 
   return data
 }
@@ -60,29 +60,27 @@ const shows = async (): Promise<ShowShort[]> => {
   return showsToChache
 }
 
-const show = async (id: number): Promise<Short[]> => {
+const show = async (id: number): Promise<Show> => {
   const response = await fetch(
     `https://front.ororo-mirror.tv/api/v2/shows/${id}`,
     { headers: getHeaders() },
   )
-  const data = response.json()
+  const data = await response.json()
 
   return data
 }
 
-const episode = async (id: number): Promise<Episode[]> => {
+const episode = async (id: number): Promise<Episode> => {
   const response = await fetch(
     `https://front.ororo-mirror.tv/api/v2/episodes/${id}`,
     { headers: getHeaders() },
   )
-  const data = response.json()
+  const data = await response.json()
 
   return data
 }
 
-const login = async (email: string, password: string) => {
-  localStorage.setItem('token', btoa(`${email}:${password}`))
-
+const isAuthenticated = async () => {
   try {
     // check if access to a movie
     const data = await movie(5253)
@@ -93,9 +91,21 @@ const login = async (email: string, password: string) => {
 
     return true
   } catch (error) {
-    localStorage.removeItem('token')
-    throw error
+    return false
   }
+}
+
+const login = async (email: string, password: string) => {
+  localStorage.setItem('token', btoa(`${email}:${password}`))
+
+  const authenticated = await isAuthenticated()
+
+  if (!authenticated) {
+    localStorage.removeItem('token')
+    throw Error()
+  }
+
+  return true
 }
 
 export const ororoApi = {
@@ -105,4 +115,5 @@ export const ororoApi = {
   show,
   episode,
   login,
+  isAuthenticated,
 }

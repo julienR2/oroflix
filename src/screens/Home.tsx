@@ -7,7 +7,9 @@ import { Carousel } from '../components/Carousel'
 import { orderBy } from 'lodash'
 import { StoreContext, StoreProvider } from '../hooks/useStore'
 import { FocusHandler } from '@noriginmedia/norigin-spatial-navigation'
-import { MovieModal } from '../components/MovieModal'
+import { MediaDetail } from '../components/MediaDetail'
+import { MovieVideo } from '../components/MovieVideo'
+import { ShowVideo } from '../components/ShowVideo'
 
 type Props = NavigationProps
 
@@ -28,7 +30,9 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
   )
 
   React.useEffect(() => {
-    setItem('focusedItem', popularMovies[0])
+    if (!popularMovies || !popularMovies[0]) return
+
+    setItem('focusedMedia', popularMovies[0])
   }, [setItem, popularMovies])
 
   React.useEffect(() => {
@@ -46,7 +50,6 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
         setMovies(moviesData)
         setShows(showsData)
         setLoading(false)
-        setItem('focusedItem', moviesData[0])
       } catch (error) {
         navigate('Login')
       }
@@ -67,18 +70,17 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
   }
 
   return (
-    <div className='h-screen flex flex-col'>
+    <div className="h-screen flex flex-col">
       <Preview />
-
-      <div ref={scrollingRef} className='overflow-scroll'>
+      <div ref={scrollingRef} className="overflow-scroll">
         <Carousel
-          label='Popular Movies'
-          items={popularMovies.slice(0, 20)}
+          label="Popular Movies"
+          medium={popularMovies.slice(0, 20)}
           onFocus={onCarouselFocus}
         />
         <Carousel
-          label='Popular Shows'
-          items={popularShows.slice(0, 20)}
+          label="Popular Shows"
+          medium={popularShows.slice(0, 20)}
           onFocus={onCarouselFocus}
         />
       </div>
@@ -88,7 +90,9 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
 
 const Providers = (props: Props) => (
   <StoreProvider>
-    <MovieModal />
+    <MovieVideo />
+    <ShowVideo />
+    <MediaDetail />
     <Home {...props} />
   </StoreProvider>
 )

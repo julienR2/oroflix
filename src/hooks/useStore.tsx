@@ -1,10 +1,12 @@
 import React from 'react'
-import { MovieShort, ShowShort } from '../types/ororo'
+import { Movie, MovieShort, Show, ShowShort } from '../types/ororo'
 import { ObjectToMap } from '../types/utils'
 
 export type Store = {
-  focusedItem?: MovieShort | ShowShort
-  selectedItem?: MovieShort | ShowShort
+  focusedMedia?: MovieShort | ShowShort
+  selectedMedia?: MovieShort | ShowShort
+  playingMovie?: Movie
+  playingShow?: Show & { episodeId: number }
 }
 
 type Context = Store & {

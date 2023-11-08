@@ -7,7 +7,7 @@
     "build": "react-scripts build",
     "tizen:prebuild": "rm -rf tizen/build tizen/debug tizen/oroflix && yarn build && mv build tizen/oroflix && cp tizen/config.sample.xml tizen/oroflix/config.xml && cp tizen/tizen_web_project.sample.yaml tizen/oroflix/tizen_web_project.yaml",
     "tizen:build": "yarn tizen:prebuild && ~/tizen-studio/tools/tizen-core/tz build tizen",
-    "tizen:run": "~/tizen-studio/tools/tizen-core/tz run tizen -s 192.168.1.5:26101"
+    "tizen:run": "yarn tizen:build && ~/tizen-studio/tools/tizen-core/tz run tizen -s 192.168.1.252:26101"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",

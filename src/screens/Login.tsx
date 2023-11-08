@@ -9,52 +9,59 @@ import { Button } from '../components/Button'
 type LoginProps = NavigationProps
 
 const Login = ({ navigate, loading, setLoading }: LoginProps) => {
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
+  const [email, setEmail] = React.useState('***REMOVED***')
+  const [password, setPassword] = React.useState('***REMOVED***')
 
   React.useEffect(() => {
     setLoading(false)
   }, [setLoading])
 
-  const onSubmit = React.useCallback<React.FormEventHandler<HTMLFormElement>>(async (event) => {
-    event?.preventDefault()
+  const onSubmit = React.useCallback<React.FormEventHandler<HTMLFormElement>>(
+    async (event) => {
+      event?.preventDefault()
 
-    if (loading) return
+      if (loading) return
 
-    setLoading(true)
+      setLoading(true)
 
-    try {
-      await ororoApi.login(email, password)
+      try {
+        await ororoApi.login(email, password)
 
-      navigate('Home')
-    } catch (error) {
-
-      setLoading(false)
-    }
-  }, [email, password, navigate, setLoading, loading])
+        navigate('Home')
+      } catch (error) {
+        setLoading(false)
+      }
+    },
+    [email, password, navigate, setLoading, loading],
+  )
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 pb-[20vh]">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          className="mx-auto h-20 w-auto"
-          src={logo}
-          alt="Oroflix"
-        />
+        <img className="mx-auto h-20 w-auto" src={logo} alt="Oroflix" />
         <h2 className="mt-12 text-center text-2xl font-medium leading-9 tracking-tight text-gray-100">
-          Sign in to your <a href='https://ororo.tv' className='text-red-700 underline'>Ororo.tv</a> account
+          Sign in to your{' '}
+          <a href="https://ororo.tv" className="text-red-700 underline">
+            Ororo.tv
+          </a>{' '}
+          account
         </h2>
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" action="#" method="POST" onSubmit={onSubmit}>
+        <form
+          className="space-y-6"
+          action="#"
+          method="POST"
+          onSubmit={onSubmit}>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-100">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium leading-6 text-gray-100">
               Email address
             </label>
             <div className="mt-2">
               <Input
-                // ref={emailRef}
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 id="email"
@@ -69,7 +76,9 @@ const Login = ({ navigate, loading, setLoading }: LoginProps) => {
 
           <div>
             <div className="flex items-center justify-between">
-              <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-100">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium leading-6 text-gray-100">
                 Password
               </label>
             </div>
@@ -87,11 +96,7 @@ const Login = ({ navigate, loading, setLoading }: LoginProps) => {
           </div>
 
           <div>
-            <Button
-              type="submit"
-            >
-              Sign in
-            </Button>
+            <Button type="submit">Sign in</Button>
           </div>
         </form>
       </div>

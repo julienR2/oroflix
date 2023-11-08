@@ -49,6 +49,7 @@ export type MovieShort = {
 }
 
 export type Movie = MovieShort & {
+  type: 'movie'
   subtitles: { lang: string; url: string }[]
   url: string
   download_url: string
@@ -99,7 +100,8 @@ export type ShowShort = {
   updated_at: number
 }
 
-export type Short = ShowShort & {
-  episodes: Episode[]
+export type Show = ShowShort & {
+  type: 'show'
+  episodes: EpisodeShort[]
   seasons: number
 }
