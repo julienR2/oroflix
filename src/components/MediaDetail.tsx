@@ -9,6 +9,7 @@ import {
   setFocus,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation'
+import { Preview } from './Preview'
 
 export const MediaDetail = () => {
   const { focusedMedia, selectedMedia, setItem } =
@@ -61,33 +62,24 @@ export const MediaDetail = () => {
 
   return (
     <div className="fixed w-screen h-screen bg-gray-950 bg-opacity-90 z-20 flex justify-center">
-      <div className="w-full max-w-[60vw] min-h-screen bg-gray-950">
-        <div className="relative w-full h-[30vh] flex items-end z-10">
-          <img
-            src={selectedMedia?.backdrop_url}
-            alt="backdrop"
-            className="-z-10 object-cover h-full w-full absolute top-0 left-0 right-0 bottom-0"
-          />
-          <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-gray-950 from-0 to-transparent to-20%" />
-
-          <h1 className=" text-gray-200 text-6xl font-bold m-8 max-w-[60%]">
-            {selectedMedia?.name}
-          </h1>
+      <div className="w-full max-w-[60vw] bg-gray-950 m-8 rounded-lg overflow-hidden flex flex-col">
+        <Preview className=" h-auto" contentClassName="max-w-none" />
+        <div className="flex-1 overflow-scroll">
+          <FocusContext.Provider value={focusKey}>
+            <div className="flex flex-col justify-start mx-8" ref={ref}>
+              <Button
+                className="max-w-xs mb-4"
+                secondary
+                autoFocus
+                onClick={() => onPlay()}>
+                Play
+              </Button>
+              <Button className="max-w-xs" secondary onClick={onClose}>
+                Close
+              </Button>
+            </div>
+          </FocusContext.Provider>
         </div>
-        <FocusContext.Provider value={focusKey}>
-          <div className="flex flex-col justify-start m-8" ref={ref}>
-            <Button
-              className=" w-52"
-              secondary
-              autoFocus
-              onClick={() => onPlay()}>
-              Play
-            </Button>
-            <Button className=" w-52" secondary onClick={onClose}>
-              Close
-            </Button>
-          </div>
-        </FocusContext.Provider>
       </div>
     </div>
   )

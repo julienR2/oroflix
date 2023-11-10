@@ -8,8 +8,7 @@ import { orderBy } from 'lodash'
 import { StoreContext, StoreProvider } from '../hooks/useStore'
 import { FocusHandler } from '@noriginmedia/norigin-spatial-navigation'
 import { MediaDetail } from '../components/MediaDetail'
-import { MovieVideo } from '../components/MovieVideo'
-import { ShowVideo } from '../components/ShowVideo'
+import { MediaVideo } from '../components/MediaVideo'
 
 type Props = NavigationProps
 
@@ -23,6 +22,7 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
     () => orderBy(movies, 'user_popularity', 'desc'),
     [movies],
   )
+  console.log('popularMovies', popularMovies)
 
   const popularShows = React.useMemo(
     () => orderBy(shows, 'user_popularity', 'desc'),
@@ -90,8 +90,7 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
 
 const Providers = (props: Props) => (
   <StoreProvider>
-    <MovieVideo />
-    <ShowVideo />
+    <MediaVideo />
     <MediaDetail />
     <Home {...props} />
   </StoreProvider>

@@ -21,9 +21,15 @@ export const Carousel = ({ label, medium, onFocus }: Props) => {
 
   const onMediaFocus = React.useCallback<FocusHandler>(({ x }) => {
     scrollingRef.current?.scrollTo({
-      left: x,
+      left: x - 32,
       behavior: 'smooth',
     })
+  }, [])
+
+  React.useEffect(() => {
+    if (!scrollingRef.current) return
+
+    scrollingRef.current.scrollLeft = 0
   }, [])
 
   return (

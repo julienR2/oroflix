@@ -1,8 +1,8 @@
 .backdropWrapper {
   background: linear-gradient(
       to right,
-      theme('colors.gray.950') 40vw,
-      transparent 80vw
+      theme('colors.gray.950') 40%,
+      transparent 80%
     ),
-    linear-gradient(to top, theme('colors.gray.950') 4vh, transparent 20vh);
+    linear-gradient(to top, theme('colors.gray.950') 4%, transparent 20%);
 }

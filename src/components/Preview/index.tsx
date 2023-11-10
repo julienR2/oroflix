@@ -4,16 +4,22 @@ import imdbLogo from '../../assets/imdb.svg'
 import { StoreContext } from '../../hooks/useStore'
 import classNames from 'classnames'
 
-import classes from './styles.module.css'
-
-export const Preview = () => {
+type Pops = {
+  className?: string
+  contentClassName?: string
+}
+export const Preview = ({ className, contentClassName }: Pops) => {
   const { focusedMedia } = React.useContext(StoreContext)
 
   if (!focusedMedia) return null
 
   return (
-    <div className="p-8 relative h-[40vh]">
-      <div className="font-medium text-lg max-w-[50%] z-10 relative">
+    <div className={classNames('p-8 relative h-[50%] z-10', className)}>
+      <div
+        className={classNames(
+          'font-medium text-lg max-w-[50%] z-10 relative',
+          contentClassName,
+        )}>
         <h1 className="text-7xl font-bold line-clamp-2 mb-4 max-w-[80%]">
           {focusedMedia.name}
         </h1>
@@ -36,17 +42,18 @@ export const Preview = () => {
           ))}
         </p>
       </div>
-      <div
+      {/* <div
         className={classNames(
           classes.backdropWrapper,
-          'absolute top-0 left-0 right-0 flex justify-end bottom-[-8vh]',
+          'absolute top-0 left-0 right-0 flex justify-end bottom-0',
         )}>
         <img
           src={focusedMedia.backdrop_url}
           alt="backdrop"
           className="-z-10 object-cover w-[60vw]"
+          loading="lazy"
         />
-      </div>
+      </div> */}
     </div>
   )
 }

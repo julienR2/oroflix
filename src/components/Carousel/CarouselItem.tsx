@@ -56,7 +56,7 @@ export const CarouselItem = ({
     <li
       ref={ref}
       className={classNames(
-        'flex-grow-0 flex-shrink-0 basis-auto mr-4 w-[12vw] rounded-md overflow-hidden transition-all',
+        'flex-grow-0 flex-shrink-0 basis-auto mr-4 w-[12vw] rounded-md overflow-hidden transition-all snap-start',
         className,
         { 'ring-4 ring-inset ring-gray-300': focused },
       )}

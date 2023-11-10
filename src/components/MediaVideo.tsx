@@ -3,8 +3,8 @@ import { StoreContext } from '../hooks/useStore'
 import { ororoApi } from '../libs/ororoApi'
 import { Episode } from '../types/ororo'
 
-export const ShowVideo = () => {
-  const { playingShow } = React.useContext(StoreContext)
+export const MediaVideo = () => {
+  const { playingShow, playingMovie } = React.useContext(StoreContext)
   const [episode, setEpisode] = React.useState<Episode>()
 
   React.useEffect(() => {
@@ -19,7 +19,7 @@ export const ShowVideo = () => {
     fetchDetails()
   }, [playingShow])
 
-  if (!playingShow || !episode) {
+  if (!playingMovie && (!playingShow || !episode)) {
     return null
   }
 
@@ -27,10 +27,10 @@ export const ShowVideo = () => {
     <div className="fixed w-screen h-screen bg-black z-30 flex justify-center">
       <video
         id="video"
-        src={episode.download_url}
+        src={(episode || playingMovie)?.download_url}
         width="100%"
         height="100%"
-        poster={playingShow.backdrop_url}
+        poster={(playingShow || playingShow)?.backdrop_url}
         preload="auto"
         autoPlay
         controls
