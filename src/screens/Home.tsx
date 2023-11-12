@@ -22,7 +22,6 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
     () => orderBy(movies, 'user_popularity', 'desc'),
     [movies],
   )
-  console.log('popularMovies', popularMovies)
 
   const popularShows = React.useMemo(
     () => orderBy(shows, 'user_popularity', 'desc'),

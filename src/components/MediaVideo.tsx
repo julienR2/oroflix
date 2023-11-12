@@ -2,10 +2,18 @@ import React from 'react'
 import { StoreContext } from '../hooks/useStore'
 import { ororoApi } from '../libs/ororoApi'
 import { Episode } from '../types/ororo'
+import { useOnKeyPress } from '../hooks/useOnKeyPress'
 
 export const MediaVideo = () => {
-  const { playingShow, playingMovie } = React.useContext(StoreContext)
+  const { playingShow, playingMovie, setItem } = React.useContext(StoreContext)
   const [episode, setEpisode] = React.useState<Episode>()
+
+  const onClose = React.useCallback(() => {
+    setItem('playingMovie', undefined)
+    setItem('playingShow', undefined)
+  }, [setItem])
+
+  useOnKeyPress({ onBack: onClose })
 
   React.useEffect(() => {
     async function fetchDetails() {

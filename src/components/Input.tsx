@@ -58,8 +58,12 @@ export const Input = ({
       {...props}
       onFocus={onInputFocus}
       ref={ref}
+      style={{
+        fontSize: 'inherit',
+        ...props.style,
+      }}
       className={classNames(
-        'block w-full border-0 rounded-md py-1.5 bg-gray-900 ring-2 ring-inset text-gray-100 shadow-smr placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-400 sm:text-sm sm:leading-6',
+        'block w-full border-0 rounded-md p-3 bg-gray-900 ring-2 ring-inset text-gray-100 shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-400',
         {
           'ring-gray-800': !focused,
           'ring-4 ring-gray-300': focused,

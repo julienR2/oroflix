@@ -3,12 +3,14 @@ import { ShowShort } from '../../types/ororo'
 import imdbLogo from '../../assets/imdb.svg'
 import { StoreContext } from '../../hooks/useStore'
 import classNames from 'classnames'
+import classes from './styles.module.css'
 
 type Pops = {
   className?: string
   contentClassName?: string
+  backdrop?: boolean
 }
-export const Preview = ({ className, contentClassName }: Pops) => {
+export const Preview = ({ className, contentClassName, backdrop }: Pops) => {
   const { focusedMedia } = React.useContext(StoreContext)
 
   if (!focusedMedia) return null
@@ -42,18 +44,20 @@ export const Preview = ({ className, contentClassName }: Pops) => {
           ))}
         </p>
       </div>
-      {/* <div
-        className={classNames(
-          classes.backdropWrapper,
-          'absolute top-0 left-0 right-0 flex justify-end bottom-0',
-        )}>
-        <img
-          src={focusedMedia.backdrop_url}
-          alt="backdrop"
-          className="-z-10 object-cover w-[60vw]"
-          loading="lazy"
-        />
-      </div> */}
+      {backdrop && (
+        <div
+          className={classNames(
+            classes.backdropWrapper,
+            'absolute top-0 left-0 right-0 flex justify-end bottom-0 bottom-[-8vh]',
+          )}>
+          <img
+            src={focusedMedia.backdrop_url}
+            alt="backdrop"
+            className="-z-10 object-cover w-[60vw]"
+            loading="lazy"
+          />
+        </div>
+      )}
     </div>
   )
 }

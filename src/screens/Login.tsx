@@ -36,33 +36,31 @@ const Login = ({ navigate, loading, setLoading }: LoginProps) => {
   )
 
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 pb-[20vh]">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+    <div className="flex min-h-full flex-1 flex-col justify-center pb-[20vh] items-center">
+      <div className="max-w-lg">
         <img
           className="mx-auto h-20 w-auto"
           src={logo}
           alt="Oroflix"
           loading="lazy"
         />
-        <h2 className="mt-12 text-center text-2xl font-medium leading-9 tracking-tight text-gray-100">
+        <h2 className="mt-12 text-center font-medium leading-9 tracking-tight text-gray-100 text-4xl">
           Sign in to your{' '}
           <a href="https://ororo.tv" className="text-red-700 underline">
             Ororo.tv
           </a>{' '}
           account
         </h2>
-      </div>
 
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form
-          className="space-y-6"
+          className="space-y-10 mt-14"
           action="#"
           method="POST"
           onSubmit={onSubmit}>
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium leading-6 text-gray-100">
+              className="block font-medium leading-6 text-gray-100">
               Email address
             </label>
             <div className="mt-2">
@@ -83,7 +81,7 @@ const Login = ({ navigate, loading, setLoading }: LoginProps) => {
             <div className="flex items-center justify-between">
               <label
                 htmlFor="password"
-                className="block text-sm font-medium leading-6 text-gray-100">
+                className="block font-medium leading-6 text-gray-100">
                 Password
               </label>
             </div>

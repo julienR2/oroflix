@@ -6,21 +6,35 @@ import { Movie, Show, ShowShort } from '../types/ororo'
 import { ororoApi } from '../libs/ororoApi'
 import {
   FocusContext,
+  FocusHandler,
   setFocus,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation'
 import { Preview } from './Preview'
+import { useOnKeyPress } from '../hooks/useOnKeyPress'
+import { groupBy } from 'lodash'
+import { Episode } from './Episode'
 
 export const MediaDetail = () => {
   const { focusedMedia, selectedMedia, setItem } =
     React.useContext(StoreContext)
   const [show, setShow] = React.useState<Show>()
   const [movie, setMovie] = React.useState<Movie>()
+  const [selectedSeason, setSelectedSeason] = React.useState<string>()
+  const scrollRef = React.useRef<HTMLDivElement | null>(null)
+
+  const episodesBySeason = React.useMemo(() => {
+    if (!show) return
+
+    return groupBy(show.episodes, 'season')
+  }, [show])
 
   const onClose = React.useCallback(() => {
     setItem('selectedMedia', undefined)
     setFocus(`${focusedMedia?.id}`)
   }, [setItem, focusedMedia?.id])
+
+  useOnKeyPress({ onBack: onClose })
 
   const onPlay = React.useCallback(
     (episodeId?: number) => {
@@ -33,7 +47,7 @@ export const MediaDetail = () => {
     [setItem, show, movie],
   )
 
-  const { ref, focusKey } = useFocusable({
+  const { ref, focusKey, focusSelf } = useFocusable({
     isFocusBoundary: true,
     focusBoundaryDirections: ['up', 'down'],
   })
@@ -56,27 +70,81 @@ export const MediaDetail = () => {
     fetchDetail()
   }, [selectedMedia])
 
+  const onSeasonSelect = React.useCallback(
+    (id?: string) => () => {
+      setSelectedSeason(id)
+    },
+    [],
+  )
+
+  const onSeasonClick = React.useCallback(() => {
+    setFocus('ArrowRight')
+  }, [])
+
+  const onEpisodeFocus = React.useCallback<FocusHandler>(({ y }) => {
+    if (!scrollRef.current) return
+
+    scrollRef.current.scrollTop = y
+  }, [])
+
+  React.useEffect(() => {
+    if (!episodesBySeason) return
+
+    focusSelf()
+  }, [episodesBySeason, focusSelf])
+
   if (!selectedMedia) {
     return null
   }
 
   return (
-    <div className="fixed w-screen h-screen bg-gray-950 bg-opacity-90 z-20 flex justify-center">
-      <div className="w-full max-w-[60vw] bg-gray-950 m-8 rounded-lg overflow-hidden flex flex-col">
-        <Preview className=" h-auto" contentClassName="max-w-none" />
-        <div className="flex-1 overflow-scroll">
+    <div className="fixed w-screen h-screen bg-gray-950 bg-opacity-[1] z-20 flex justify-center">
+      <div className="w-full rounded-lg overflow-hidden flex flex-col">
+        <Preview className=" h-auto" backdrop />
+        <div className="flex-1 mt-8 z-10 overflow-hidden">
           <FocusContext.Provider value={focusKey}>
-            <div className="flex flex-col justify-start mx-8" ref={ref}>
-              <Button
-                className="max-w-xs mb-4"
-                secondary
-                autoFocus
-                onClick={() => onPlay()}>
-                Play
-              </Button>
-              <Button className="max-w-xs" secondary onClick={onClose}>
-                Close
-              </Button>
+            <div ref={ref} className="flex mx-8 h-full">
+              <div className="flex flex-col justify-start space-y-5">
+                {!selectedSeason && (
+                  <Button
+                    className="max-w-xs"
+                    secondary
+                    autoFocus
+                    onClick={() => onPlay()}>
+                    Play
+                  </Button>
+                )}
+                {episodesBySeason && !selectedSeason && (
+                  <Button onClick={onSeasonSelect('1')} secondary>
+                    Seasons
+                  </Button>
+                )}
+                {episodesBySeason &&
+                  selectedSeason &&
+                  Object.keys(episodesBySeason).map((key) => (
+                    <Button
+                      key={key}
+                      onFocus={onSeasonSelect(key)}
+                      onClick={onSeasonClick}
+                      secondary>
+                      Season {key} - {episodesBySeason[key].length} episodes
+                    </Button>
+                  ))}
+              </div>
+              <div
+                ref={scrollRef}
+                className="flex flex-col mx-10 space-y-5 overflow-scroll">
+                {episodesBySeason &&
+                  selectedSeason &&
+                  episodesBySeason[selectedSeason].map((episode) => (
+                    <Episode
+                      key={episode.id}
+                      episode={episode}
+                      onFocus={onEpisodeFocus}
+                      onClick={() => onPlay(episode.id)}
+                    />
+                  ))}
+              </div>
             </div>
           </FocusContext.Provider>
         </div>
