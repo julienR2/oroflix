@@ -9,8 +9,8 @@ import { Button } from '../components/Button'
 type LoginProps = NavigationProps
 
 const Login = ({ navigate, loading, setLoading }: LoginProps) => {
-  const [email, setEmail] = React.useState('***REMOVED***')
-  const [password, setPassword] = React.useState('***REMOVED***')
+  const [email, setEmail] = React.useState('')
+  const [password, setPassword] = React.useState('')
 
   React.useEffect(() => {
     setLoading(false)
