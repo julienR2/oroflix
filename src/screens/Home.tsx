@@ -1,22 +1,25 @@
 import React from 'react'
-import { ororoApi } from '../libs/ororoApi'
 import { NavigationProps } from '../types/navigation'
-import { MovieShort, ShowShort } from '../types/ororo'
 import { Preview } from '../components/Preview'
 import { Carousel } from '../components/Carousel'
 import { orderBy } from 'lodash'
-import { StoreContext, StoreProvider } from '../hooks/useStore'
 import { FocusHandler } from '@noriginmedia/norigin-spatial-navigation'
 import { MediaDetail } from '../components/MediaDetail'
 import { MediaVideo } from '../components/MediaVideo'
+import { useMedia } from '../hooks/useMedia'
+import { MediaStoreProvider, useMediaStore } from '../hooks/useMediaStore'
 
 type Props = NavigationProps
 
 const Home = ({ navigate, loading, setLoading }: Props) => {
   const scrollingRef = React.useRef<HTMLDivElement>(null)
-  const { setItem } = React.useContext(StoreContext)
-  const [movies, setMovies] = React.useState<MovieShort[]>([])
-  const [shows, setShows] = React.useState<ShowShort[]>([])
+  const { setStoreItem } = useMediaStore()
+  const {
+    movies,
+    shows,
+    isLoading: isMediaLoading,
+    error: mediaError,
+  } = useMedia()
 
   const popularMovies = React.useMemo(
     () => orderBy(movies, 'user_popularity', 'desc'),
@@ -31,31 +34,18 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
   React.useEffect(() => {
     if (!popularMovies || !popularMovies[0]) return
 
-    setItem('focusedMedia', popularMovies[0])
-  }, [setItem, popularMovies])
+    setStoreItem('focusedMedia', popularMovies[0])
+  }, [setStoreItem, popularMovies])
 
   React.useEffect(() => {
-    async function fetchData() {
-      try {
-        const [moviesData, showsData] = await Promise.all([
-          ororoApi.movies(),
-          ororoApi.shows(),
-        ])
-
-        if (!moviesData.length) {
-          throw Error()
-        }
-
-        setMovies(moviesData)
-        setShows(showsData)
-        setLoading(false)
-      } catch (error) {
-        navigate('Login')
-      }
+    if (!isMediaLoading && !mediaError) {
+      return setLoading(false)
     }
 
-    fetchData()
-  }, [navigate, setItem, setLoading])
+    if (mediaError) {
+      return navigate('Login')
+    }
+  }, [isMediaLoading, mediaError, navigate, setLoading])
 
   const onCarouselFocus = React.useCallback<FocusHandler>(({ y }) => {
     scrollingRef.current?.scrollTo({
@@ -69,7 +59,7 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
   }
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col pl-4">
       <Preview />
       <div ref={scrollingRef} className="overflow-scroll">
         <Carousel
@@ -88,11 +78,11 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
 }
 
 const Providers = (props: Props) => (
-  <StoreProvider>
+  <MediaStoreProvider>
     <MediaVideo />
     <MediaDetail />
     <Home {...props} />
-  </StoreProvider>
+  </MediaStoreProvider>
 )
 
 export default Providers

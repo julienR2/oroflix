@@ -1,9 +1,9 @@
 import React from 'react'
 import { ShowShort } from '../../types/ororo'
 import imdbLogo from '../../assets/imdb.svg'
-import { StoreContext } from '../../hooks/useStore'
 import classNames from 'classnames'
 import classes from './styles.module.css'
+import { useMediaStore } from '../../hooks/useMediaStore'
 
 type Pops = {
   className?: string
@@ -11,12 +11,12 @@ type Pops = {
   backdrop?: boolean
 }
 export const Preview = ({ className, contentClassName, backdrop }: Pops) => {
-  const { focusedMedia } = React.useContext(StoreContext)
+  const { focusedMedia } = useMediaStore()
 
   if (!focusedMedia) return null
 
   return (
-    <div className={classNames('p-8 relative h-[50%] z-10', className)}>
+    <div className={classNames('p-8 relative h-[50%] z-10 pl-0', className)}>
       <div
         className={classNames(
           'font-medium text-lg max-w-[50%] z-10 relative',
@@ -48,7 +48,7 @@ export const Preview = ({ className, contentClassName, backdrop }: Pops) => {
         <div
           className={classNames(
             classes.backdropWrapper,
-            'absolute top-0 left-0 right-0 flex justify-end bottom-0 bottom-[-8vh]',
+            'absolute top-0 left-0 right-0 flex justify-end bottom-[-8vh]',
           )}>
           <img
             src={focusedMedia.backdrop_url}

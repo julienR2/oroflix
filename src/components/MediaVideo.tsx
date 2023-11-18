@@ -1,19 +1,20 @@
 import React from 'react'
-import { StoreContext } from '../hooks/useStore'
 import { ororoApi } from '../libs/ororoApi'
 import { Episode } from '../types/ororo'
 import { useOnKeyPress } from '../hooks/useOnKeyPress'
+import { useMediaStore } from '../hooks/useMediaStore'
 
 export const MediaVideo = () => {
-  const { playingShow, playingMovie, setItem } = React.useContext(StoreContext)
+  const { playingShow, playingMovie, setStoreItem } = useMediaStore()
   const [episode, setEpisode] = React.useState<Episode>()
+  const isHidden = !playingMovie && (!playingShow || !episode)
 
   const onClose = React.useCallback(() => {
-    setItem('playingMovie', undefined)
-    setItem('playingShow', undefined)
-  }, [setItem])
+    setStoreItem('playingMovie', undefined)
+    setStoreItem('playingShow', undefined)
+  }, [setStoreItem])
 
-  useOnKeyPress({ onBack: onClose })
+  useOnKeyPress({ onBack: onClose, skip: isHidden })
 
   React.useEffect(() => {
     async function fetchDetails() {
@@ -27,12 +28,12 @@ export const MediaVideo = () => {
     fetchDetails()
   }, [playingShow])
 
-  if (!playingMovie && (!playingShow || !episode)) {
+  if (isHidden) {
     return null
   }
 
   return (
-    <div className="fixed w-screen h-screen bg-black z-30 flex justify-center">
+    <div className="fixed w-screen h-screen bg-black z-30 flex justify-center left-0">
       <video
         id="video"
         src={(episode || playingMovie)?.download_url}

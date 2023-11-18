@@ -8,10 +8,13 @@ type Params = {
   onRight?: () => void
   onLeft?: () => void
   onBack?: () => void
+  skip?: boolean
 }
 
 export const useOnKeyPress = (params: Params) => {
   React.useEffect(() => {
+    if (params.skip) return
+
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'ArrowUp') {
         params.onUp?.()
@@ -25,7 +28,11 @@ export const useOnKeyPress = (params: Params) => {
       if (event.key === 'ArrowRight') {
         params.onRight?.()
       }
-      if (event.key === BACK_KEY || event.key === 'Backspace') {
+      if (
+        event.key === BACK_KEY ||
+        event.key === 'Backspace' ||
+        event.key === 'Escape'
+      ) {
         params.onBack?.()
       }
     }

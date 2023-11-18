@@ -1,37 +1,31 @@
 import React from 'react'
 import { MovieShort, ShowShort } from '../../types/ororo'
 import classNames from 'classnames'
-import { StoreContext } from '../../hooks/useStore'
 import {
   FocusHandler,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation'
+import { useMediaStore } from '../../hooks/useMediaStore'
 
 type Props = {
   className?: string
   media: MovieShort | ShowShort
-  autoFocus?: boolean
   onFocus: FocusHandler
 }
 
-export const CarouselItem = ({
-  media,
-  className,
-  autoFocus,
-  onFocus,
-}: Props) => {
-  const { setItem, focusedMedia } = React.useContext(StoreContext)
+export const CarouselItem = ({ media, className, onFocus }: Props) => {
+  const { setStoreItem, focusedMedia } = useMediaStore()
 
   const onSelect = React.useCallback(() => {
-    setItem('selectedMedia', media)
-  }, [setItem, media])
+    setStoreItem('selectedMedia', media)
+  }, [setStoreItem, media])
 
   const onItemFocus = React.useCallback<FocusHandler<object>>(
     (layout, props, details) => {
-      setItem('focusedMedia', media)
+      setStoreItem('focusedMedia', media)
       onFocus(layout, props, details)
     },
-    [onFocus, media, setItem],
+    [onFocus, media, setStoreItem],
   )
 
   const { ref, focused, focusSelf } = useFocusable({
@@ -42,21 +36,22 @@ export const CarouselItem = ({
 
   const onClick = React.useCallback(() => {
     focusSelf()
-    setItem('focusedMedia', media)
-    setItem('selectedMedia', media)
-  }, [focusSelf, setItem, media])
+    setStoreItem('focusedMedia', media)
+    setStoreItem('selectedMedia', media)
+  }, [focusSelf, setStoreItem, media])
 
   React.useLayoutEffect(() => {
+    console.log('focusedMedia?.id', focusedMedia?.id)
     if (focusedMedia?.id !== media.id) return
-
+    console.log('focussing', media.id)
     focusSelf()
   }, [focusedMedia?.id, focusSelf, media.id])
 
   return (
-    <li
+    <div
       ref={ref}
       className={classNames(
-        'flex-grow-0 flex-shrink-0 basis-auto mr-4 w-[12vw] rounded-md overflow-hidden transition-all snap-start',
+        'flex-grow-0 flex-shrink-0 basis-auto mr-4 mb-4 w-[12vw] rounded-md overflow-hidden transition-all snap-start',
         className,
         { 'ring-4 ring-inset ring-gray-300': focused },
       )}
@@ -66,6 +61,6 @@ export const CarouselItem = ({
         alt="thumbnail"
         className={classNames('w-full -z-10 relative')}
       />
-    </li>
+    </div>
   )
 }
