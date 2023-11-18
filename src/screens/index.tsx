@@ -20,7 +20,7 @@ const Routes = {
 }
 
 const Index = () => {
-  const [currentRoute, setCurrentRoute] = React.useState<Screens>('Search')
+  const [currentRoute, setCurrentRoute] = React.useState<Screens>('Home')
   const [loading, setLoading] = React.useState(true)
 
   const navigate = React.useCallback((screen: Screens) => {
