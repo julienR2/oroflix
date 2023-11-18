@@ -64,12 +64,12 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
       <div ref={scrollingRef} className="overflow-scroll">
         <Carousel
           label="Popular Movies"
-          medium={popularMovies.slice(0, 20)}
+          media={popularMovies.slice(0, 20)}
           onFocus={onCarouselFocus}
         />
         <Carousel
           label="Popular Shows"
-          medium={popularShows.slice(0, 20)}
+          media={popularShows.slice(0, 20)}
           onFocus={onCarouselFocus}
         />
       </div>

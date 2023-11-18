@@ -22,7 +22,7 @@ const Routes = {
 }
 
 const Index = () => {
-  const [currentRoute, setCurrentRoute] = React.useState<Screens>('Home')
+  const [currentRoute, setCurrentRoute] = React.useState<Screens>('Search')
   const [loading, setLoading] = React.useState(true)
 
   const onRoutePress = React.useCallback(

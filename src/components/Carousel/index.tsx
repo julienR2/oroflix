@@ -9,13 +9,13 @@ import {
 import { CarouselItem } from './CarouselItem'
 
 type Props = {
-  label: string
-  medium: Array<MovieShort | ShowShort>
-  onFocus: FocusHandler
+  label?: string
+  media: Array<MovieShort | ShowShort>
+  onFocus?: FocusHandler
   vertical?: boolean
 }
 
-export const Carousel = ({ label, medium, onFocus, vertical }: Props) => {
+export const Carousel = ({ label, media, onFocus, vertical }: Props) => {
   const { ref, focusKey } = useFocusable({ onFocus })
 
   const scrollingRef = React.useRef<HTMLDivElement>(null)
@@ -41,9 +41,11 @@ export const Carousel = ({ label, medium, onFocus, vertical }: Props) => {
           vertical ? 'mb-0' : 'mb-6',
         )}
         ref={ref}>
-        <p className="ml-8 text-gray-300 text-2xl font-semibold mb-2">
-          {label}
-        </p>
+        {label && (
+          <p className="ml-8 text-gray-300 text-2xl font-semibold mb-2">
+            {label}
+          </p>
+        )}
         <div
           ref={scrollingRef}
           className={classNames(
@@ -52,7 +54,7 @@ export const Carousel = ({ label, medium, onFocus, vertical }: Props) => {
               'flex-wrap h-full': vertical,
             },
           )}>
-          {medium.map((media, index) => (
+          {media.map((media) => (
             <CarouselItem key={media.id} onFocus={onMediaFocus} media={media} />
           ))}
         </div>
