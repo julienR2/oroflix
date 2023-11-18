@@ -1,4 +1,5 @@
 import {
+  FocusContext,
   setFocus,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation'
@@ -54,35 +55,42 @@ type KeyboardProps = {
 }
 
 export const Keyboard = ({ onKeyPress, onBackSpace }: KeyboardProps) => {
+  const { ref, focusKey } = useFocusable({
+    isFocusBoundary: true,
+    focusBoundaryDirections: ['up', 'down'],
+  })
+
   React.useEffect(() => {
     setFocus('a')
   }, [])
 
   return (
-    <div className="flex flex-wrap">
-      <div className="flex w-full">
-        <Key
-          keyCode={' '}
-          onKeyPress={onKeyPress}
-          className="flex flex-1 p-0.5 aspect-[7/2]">
-          <SpaceIcon width={48} className="mt-1" />
-        </Key>
-        <Key
-          keyCode={'Backspace'}
-          onKeyPress={onBackSpace}
-          className="flex flex-1 p-0.5">
-          <BackIcon width={32} />
-        </Key>
+    <FocusContext.Provider value={focusKey}>
+      <div ref={ref} className="flex flex-wrap">
+        <div className="flex w-full">
+          <Key
+            keyCode={' '}
+            onKeyPress={onKeyPress}
+            className="flex flex-1 p-0.5 aspect-[7/2]">
+            <SpaceIcon width={48} className="mt-1" />
+          </Key>
+          <Key
+            keyCode={'Backspace'}
+            onKeyPress={onBackSpace}
+            className="flex flex-1 p-0.5">
+            <BackIcon width={32} />
+          </Key>
+        </div>
+        {[...ALPHABETS, ...NUMBERS].map((letter) => (
+          <Key
+            keyCode={letter}
+            onKeyPress={onKeyPress}
+            className="flex aspect-square p-0.5"
+            style={{ width: 'calc(100% /6)' }}>
+            {letter}
+          </Key>
+        ))}
       </div>
-      {[...ALPHABETS, ...NUMBERS].map((letter) => (
-        <Key
-          keyCode={letter}
-          onKeyPress={onKeyPress}
-          className="flex aspect-square p-0.5"
-          style={{ width: 'calc(100% /6)' }}>
-          {letter}
-        </Key>
-      ))}
-    </div>
+    </FocusContext.Provider>
   )
 }

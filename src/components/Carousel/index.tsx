@@ -16,13 +16,18 @@ type Props = {
 }
 
 export const Carousel = ({ label, media, onFocus, vertical }: Props) => {
-  const { ref, focusKey } = useFocusable({ onFocus })
+  const { ref, focusKey } = useFocusable({
+    onFocus,
+    isFocusBoundary: true,
+    focusBoundaryDirections: ['up', 'down'],
+  })
 
   const scrollingRef = React.useRef<HTMLDivElement>(null)
 
-  const onMediaFocus = React.useCallback<FocusHandler>(({ x }) => {
+  const onMediaFocus = React.useCallback<FocusHandler>((...params) => {
     scrollingRef.current?.scrollTo({
-      left: x,
+      left: params[0].x,
+      top: params[0].y,
       behavior: 'smooth',
     })
   }, [])

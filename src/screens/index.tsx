@@ -1,17 +1,15 @@
 import React from 'react'
-import { init, useFocusable } from '@noriginmedia/norigin-spatial-navigation'
+import { init } from '@noriginmedia/norigin-spatial-navigation'
 
 import Login from './Login'
 import './index.css'
 import Home from './Home'
 import { Screens } from '../types/navigation'
 import Search from './Search'
-import { ReactComponent as HomeIcon } from '../assets/home.svg'
-import { ReactComponent as SearchIcon } from '../assets/search.svg'
-import classNames from 'classnames'
 import { MediaStoreProvider } from '../hooks/useMediaStore'
 import { MediaVideo } from '../components/MediaVideo'
 import { MediaDetail } from '../components/MediaDetail'
+import { Sidebar } from '../components/Sidebar'
 
 init()
 
@@ -25,21 +23,9 @@ const Index = () => {
   const [currentRoute, setCurrentRoute] = React.useState<Screens>('Search')
   const [loading, setLoading] = React.useState(true)
 
-  const onRoutePress = React.useCallback(
-    (screen: Screens) => () => {
-      setCurrentRoute(screen)
-    },
-    [],
-  )
-
-  const { ref: searchRef, focused: searchFocused } = useFocusable({
-    focusKey: 'search',
-    onEnterPress: onRoutePress('Search'),
-  })
-  const { ref: homeRef, focused: homeFocused } = useFocusable({
-    focusKey: 'home',
-    onEnterPress: onRoutePress('Home'),
-  })
+  const navigate = React.useCallback((screen: Screens) => {
+    setCurrentRoute(screen)
+  }, [])
 
   const Route = Routes[currentRoute]
 
@@ -68,41 +54,13 @@ const Index = () => {
         </div>
       )}
       <div className="flex h-full w-full overflow-hidden">
-        <div className="flex flex-col p-4 justify-center items-center ml-4">
-          <div
-            ref={searchRef}
-            className={classNames('p-2 mb-10', {
-              'ring-2 ring-inset ring-gray-300 rounded-md': searchFocused,
-            })}>
-            <SearchIcon
-              width={24}
-              className={classNames('stroke-2 stroke-gray-600', {
-                'stroke-gray-200': currentRoute === 'Search',
-              })}
-            />
-          </div>
-          <div
-            ref={homeRef}
-            className={classNames('p-2', {
-              'ring-2 ring-inset ring-gray-300 rounded-md': homeFocused,
-            })}>
-            <HomeIcon
-              width={24}
-              className={classNames(
-                'stroke-2 ',
-                currentRoute === 'Home'
-                  ? 'stroke-gray-200 fill-gray-200'
-                  : 'stroke-gray-600 fill-gray-600',
-              )}
-            />
-          </div>
-        </div>
+        <Sidebar navigate={navigate} currentRoute={currentRoute} />
         <div className="w-full h-full">
           <MediaStoreProvider>
             <MediaVideo />
             <MediaDetail />
             <Route
-              navigate={setCurrentRoute}
+              navigate={navigate}
               loading={loading}
               setLoading={setLoading}
             />
