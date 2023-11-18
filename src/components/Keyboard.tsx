@@ -1,6 +1,5 @@
 import {
   FocusContext,
-  setFocus,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation'
 import classNames from 'classnames'
@@ -23,9 +22,6 @@ const Key = ({ keyCode, children, onKeyPress, ...props }: KeyProps) => {
   const { focused, ref } = useFocusable({
     focusKey: `${keyCode}`,
     onEnterPress: () => {
-      ref.current.click()
-    },
-    onEnterRelease: () => {
       onKeyPress?.(keyCode)
     },
   })
@@ -55,14 +51,15 @@ type KeyboardProps = {
 }
 
 export const Keyboard = ({ onKeyPress, onBackSpace }: KeyboardProps) => {
-  const { ref, focusKey } = useFocusable({
+  const { ref, focusKey, focusSelf } = useFocusable({
     isFocusBoundary: true,
     focusBoundaryDirections: ['up', 'down'],
+    preferredChildFocusKey: 'a',
   })
 
   React.useEffect(() => {
-    setFocus('a')
-  }, [])
+    focusSelf()
+  }, [focusSelf])
 
   return (
     <FocusContext.Provider value={focusKey}>
@@ -83,6 +80,7 @@ export const Keyboard = ({ onKeyPress, onBackSpace }: KeyboardProps) => {
         </div>
         {[...ALPHABETS, ...NUMBERS].map((letter) => (
           <Key
+            key={letter}
             keyCode={letter}
             onKeyPress={onKeyPress}
             className="flex aspect-square p-0.5"

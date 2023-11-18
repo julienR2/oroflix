@@ -55,7 +55,7 @@ const Search = ({ navigate, setLoading }: Props) => {
 
   return (
     <div className="flex h-full">
-      <div className="flex flex-col w-[30%] p-6">
+      <div className="flex flex-col w-[30%] p-7">
         <Keyboard onKeyPress={onKeyPress} onBackSpace={onBackSpace} />
       </div>
       <div className="flex flex-col flex-1 p-4">

@@ -20,16 +20,21 @@ const Route = ({ name, onRoutePress, currentRoute, icon: Icon }: Props) => {
   const { ref, focused } = useFocusable({
     focusKey: name,
     onEnterPress: () => {
-      onRoutePress?.(name)
+      ref.current.click()
     },
   })
+
+  const onClick = React.useCallback(() => {
+    onRoutePress?.(name)
+  }, [onRoutePress, name])
 
   return (
     <div
       ref={ref}
       className={classNames('p-2 mb-10', {
         'ring-2 ring-inset ring-gray-300 rounded-md': focused,
-      })}>
+      })}
+      onClick={onClick}>
       <Icon
         width={24}
         className={classNames(
