@@ -10,10 +10,7 @@ const Search = ({ navigate, setLoading }: Props) => {
   const { setStoreItem } = useMediaStore()
   const { movies, isLoading, error } = useMedia()
   React.useEffect(() => {
-    console.log('movies', movies)
     if (!isLoading && !error) {
-      console.log('selected Mediua !', movies[0])
-      setStoreItem('focusedMedia', movies[0])
       return setLoading(false)
     }
 

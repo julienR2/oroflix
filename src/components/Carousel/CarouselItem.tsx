@@ -41,9 +41,8 @@ export const CarouselItem = ({ media, className, onFocus }: Props) => {
   }, [focusSelf, setStoreItem, media])
 
   React.useLayoutEffect(() => {
-    console.log('focusedMedia?.id', focusedMedia?.id)
     if (focusedMedia?.id !== media.id) return
-    console.log('focussing', media.id)
+
     focusSelf()
   }, [focusedMedia?.id, focusSelf, media.id])
 
