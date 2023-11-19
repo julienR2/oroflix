@@ -118,17 +118,22 @@ export const MediaDetail = () => {
                     Seasons
                   </Button>
                 )}
-                {episodesBySeason &&
-                  selectedSeason &&
-                  Object.keys(episodesBySeason).map((key) => (
-                    <Button
-                      key={key}
-                      onFocus={onSeasonSelect(key)}
-                      onClick={onSeasonClick}
-                      secondary>
-                      Season {key} - {episodesBySeason[key].length} episodes
-                    </Button>
-                  ))}
+                {episodesBySeason && selectedSeason && (
+                  <div className="overflow-scroll flex flex-col justify-start space-y-5">
+                    {Object.keys(episodesBySeason).map((key) => (
+                      <Button
+                        key={key}
+                        onFocus={onSeasonSelect(key)}
+                        onClick={onSeasonClick}
+                        secondary>
+                        <div className="flex justify-between">
+                          <p>Season {key}</p>
+                          <p>{episodesBySeason[key].length} episodes</p>
+                        </div>
+                      </Button>
+                    ))}
+                  </div>
+                )}
               </div>
               <div
                 ref={scrollRef}
