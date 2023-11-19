@@ -18,8 +18,9 @@ type Props = {
 export const Carousel = ({ label, media, onFocus, vertical }: Props) => {
   const { ref, focusKey } = useFocusable({
     onFocus,
-    isFocusBoundary: true,
-    focusBoundaryDirections: ['up', 'down'],
+    ...(vertical
+      ? { isFocusBoundary: true, focusBoundaryDirections: ['up', 'down'] }
+      : {}),
   })
 
   const scrollingRef = React.useRef<HTMLDivElement>(null)
