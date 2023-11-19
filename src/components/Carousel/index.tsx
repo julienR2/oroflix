@@ -48,18 +48,13 @@ export const Carousel = ({ label, media, onFocus, vertical }: Props) => {
         )}
         ref={ref}>
         {label && (
-          <p className="ml-8 text-gray-300 text-2xl font-semibold mb-2">
-            {label}
-          </p>
+          <p className="text-gray-300 text-2xl font-semibold mb-2">{label}</p>
         )}
         <div
           ref={scrollingRef}
-          className={classNames(
-            'flex w-full overflow-scroll scroll-smooth scroll-pl-8',
-            {
-              'flex-wrap h-full': vertical,
-            },
-          )}>
+          className={classNames('flex w-full overflow-scroll scroll-smooth', {
+            'flex-wrap h-full': vertical,
+          })}>
           {media.map((media) => (
             <CarouselItem key={media.id} onFocus={onMediaFocus} media={media} />
           ))}

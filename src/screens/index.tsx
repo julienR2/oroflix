@@ -53,9 +53,9 @@ const Index = () => {
           </div>
         </div>
       )}
-      <div className="flex h-full w-full overflow-hidden">
+      <div className="flex h-full overflow-hidden">
         <Sidebar navigate={navigate} currentRoute={currentRoute} />
-        <div className="w-full h-full">
+        <div className="h-full flex-1 overflow-hidden">
           <MediaStoreProvider>
             <MediaVideo />
             <MediaDetail />

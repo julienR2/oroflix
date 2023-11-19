@@ -28,19 +28,19 @@ export const Episode = ({ episode, onFocus, ...props }: Props) => {
       ref={ref}
       {...props}
       className={classNames(
-        'border border-gray-600 py-6 px-8 rounded-md',
+        'border border-gray-600 py-4 px-4 rounded-md',
         focused ? 'border-gray-400 bg-gray-900' : 'bg-gray-950',
       )}>
       <h2
         className={classNames(
-          'font-bold text-3xl',
+          'font-bold text-2xl',
           focused ? 'text-gray-300' : 'text-gray-500',
         )}>
         {episode.name}
       </h2>
       <p
         className={classNames(
-          'mt-6',
+          'mt-2 text-xl',
           focused ? 'text-gray-400' : 'text-gray-600',
         )}>
         {episode.plot}

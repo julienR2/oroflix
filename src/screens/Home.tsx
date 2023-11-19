@@ -3,7 +3,11 @@ import { NavigationProps } from '../types/navigation'
 import { Preview } from '../components/Preview'
 import { Carousel } from '../components/Carousel'
 import { orderBy } from 'lodash'
-import { FocusHandler } from '@noriginmedia/norigin-spatial-navigation'
+import {
+  FocusContext,
+  FocusHandler,
+  useFocusable,
+} from '@noriginmedia/norigin-spatial-navigation'
 import { MediaDetail } from '../components/MediaDetail'
 import { MediaVideo } from '../components/MediaVideo'
 import { useMedia } from '../hooks/useMedia'
@@ -13,7 +17,8 @@ type Props = NavigationProps
 
 const Home = ({ navigate, loading, setLoading }: Props) => {
   const scrollingRef = React.useRef<HTMLDivElement>(null)
-  const { setStoreItem } = useMediaStore()
+  const { setStoreItem, selectedMedia, playingMovie, playingShow } =
+    useMediaStore()
   const {
     movies,
     shows,
@@ -54,26 +59,40 @@ const Home = ({ navigate, loading, setLoading }: Props) => {
     })
   }, [])
 
+  const { ref, focusKey, focusSelf } = useFocusable({
+    isFocusBoundary: true,
+    focusBoundaryDirections: ['up', 'down', 'right'],
+  })
+
+  React.useEffect(() => {
+    if (selectedMedia || playingMovie || playingShow) return
+
+    focusSelf()
+  }, [focusSelf, selectedMedia, playingMovie, playingShow])
+
   if (loading) {
     return null
   }
 
   return (
-    <div className="h-screen flex flex-col pl-4">
-      <Preview />
-      <div ref={scrollingRef} className="overflow-scroll">
-        <Carousel
-          label="Popular Movies"
-          media={popularMovies.slice(0, 20)}
-          onFocus={onCarouselFocus}
-        />
-        <Carousel
-          label="Popular Shows"
-          media={popularShows.slice(0, 20)}
-          onFocus={onCarouselFocus}
-        />
+    <FocusContext.Provider value={focusKey}>
+      <div ref={ref} className="h-screen flex flex-col pl-4">
+        <Preview />
+
+        <div ref={scrollingRef} className="overflow-scroll">
+          <Carousel
+            label="Popular Movies"
+            media={popularMovies.slice(0, 20)}
+            onFocus={onCarouselFocus}
+          />
+          <Carousel
+            label="Popular Shows"
+            media={popularShows.slice(0, 20)}
+            onFocus={onCarouselFocus}
+          />
+        </div>
       </div>
-    </div>
+    </FocusContext.Provider>
   )
 }
 

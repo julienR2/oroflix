@@ -4,7 +4,7 @@ import { Episode } from '../types/ororo'
 import { useOnKeyPress } from '../hooks/useOnKeyPress'
 import { useMediaStore } from '../hooks/useMediaStore'
 
-export const MediaVideo = () => {
+export const MediaVideoComponent = () => {
   const { playingShow, playingMovie, setStoreItem } = useMediaStore()
   const [episode, setEpisode] = React.useState<Episode>()
   const isHidden = !playingMovie && (!playingShow || !episode)
@@ -46,4 +46,14 @@ export const MediaVideo = () => {
       />
     </div>
   )
+}
+
+export const MediaVideo = () => {
+  const { playingMovie, playingShow } = useMediaStore()
+
+  if (!playingMovie && !playingShow) {
+    return null
+  }
+
+  return <MediaVideoComponent />
 }

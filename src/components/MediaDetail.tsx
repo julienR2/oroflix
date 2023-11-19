@@ -15,7 +15,7 @@ import { groupBy } from 'lodash'
 import { Episode } from './Episode'
 import { useMediaStore } from '../hooks/useMediaStore'
 
-export const MediaDetail = () => {
+export const MediaDetailComponent = () => {
   const { focusedMedia, selectedMedia, setStoreItem } = useMediaStore()
   const [show, setShow] = React.useState<Show>()
   const [movie, setMovie] = React.useState<Movie>()
@@ -48,7 +48,7 @@ export const MediaDetail = () => {
 
   const { ref, focusKey, focusSelf } = useFocusable({
     isFocusBoundary: true,
-    focusBoundaryDirections: ['up', 'down'],
+    focusBoundaryDirections: ['up', 'down', 'left', 'right'],
   })
 
   React.useEffect(() => {
@@ -87,14 +87,8 @@ export const MediaDetail = () => {
   }, [])
 
   React.useEffect(() => {
-    if (!episodesBySeason) return
-
     focusSelf()
-  }, [episodesBySeason, focusSelf])
-
-  if (!selectedMedia) {
-    return null
-  }
+  }, [focusSelf])
 
   return (
     <div className="fixed w-screen h-screen bg-gray-950 bg-opacity-90 z-20 flex justify-center left-0">
@@ -126,9 +120,11 @@ export const MediaDetail = () => {
                         onFocus={onSeasonSelect(key)}
                         onClick={onSeasonClick}
                         secondary>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between min-w-[18vw] items-center">
                           <p>Season {key}</p>
-                          <p>{episodesBySeason[key].length} episodes</p>
+                          <p className=" text-gray-500 text-xl">
+                            {episodesBySeason[key].length} episodes
+                          </p>
                         </div>
                       </Button>
                     ))}
@@ -155,4 +151,14 @@ export const MediaDetail = () => {
       </div>
     </div>
   )
+}
+
+export const MediaDetail = () => {
+  const { selectedMedia, playingMovie, playingShow } = useMediaStore()
+
+  if (!selectedMedia || playingMovie || playingShow) {
+    return null
+  }
+
+  return <MediaDetailComponent />
 }
